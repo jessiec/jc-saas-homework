@@ -39,7 +39,11 @@ class MoviesController < ApplicationController
   end
 
   def sort
-    @movies = Movie.all(:order => "title")
+    if params[:sort_item] == :title 
+       @movies = Movie.all(:order => "title")
+    else
+       @movies = Movie.all(:order => "release_date")
+    end
     render :action => "index"
   end
 end
