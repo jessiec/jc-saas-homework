@@ -39,6 +39,7 @@ class MoviesController < ApplicationController
   end
 
   def sort
-
+    @movies = Movie.all(:order => "title")
+    render :action => "index"
   end
 end
