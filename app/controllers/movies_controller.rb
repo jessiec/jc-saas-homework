@@ -41,8 +41,10 @@ class MoviesController < ApplicationController
   def sort
     if params[:sort_item] == "title" 
        @movies = Movie.all(:order => "title")
+       @highlight = "title"
     else
        @movies = Movie.all(:order => "release_date")
+       @highlight = "release_date"
     end
     render :action => "index"
   end
