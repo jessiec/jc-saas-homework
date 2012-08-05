@@ -7,14 +7,16 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @all_ratings = {'G'=>false, 'PG'=>false, 'PG-13'=>false, 'R'=>false}
     if params.has_key?("ratings")
        @search_criteria = params["ratings"].keys
+       @search_criteria.each { | value | @all_ratings[value] = true }
     end
 
     @movies = Movie.where :rating => @search_criteria
 #    @movies = Movie.all
 # temp to show checkbox
-    @all_ratings = {'G'=>false, 'PG'=>false, 'PG-13'=>false, 'R'=>false}
+#@all_ratings = {'G'=>false, 'PG'=>false, 'PG-13'=>false, 'R'=>false}
   end
 
   def new
@@ -53,6 +55,8 @@ class MoviesController < ApplicationController
        @movies = Movie.all(:order => "release_date")
        @highlight = "release_date"
     end
+#temperoary measure so sort won't crash
+    @all_ratings = {'G'=>false, 'PG'=>false, 'PG-13'=>false, 'R'=>false}
     render :action => "index"
   end
 end
