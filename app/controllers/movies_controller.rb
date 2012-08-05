@@ -7,9 +7,14 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    if params.has_key?("ratings")
+       @search_criteria = params["ratings"].keys
+    end
+
+    @movies = Movie.where :rating => @search_criteria
+#    @movies = Movie.all
 # temp to show checkbox
-    @all_ratings = {'G'=>true, 'PG'=>true, 'PG-13'=>true, 'R'=>true}
+    @all_ratings = {'G'=>false, 'PG'=>false, 'PG-13'=>false, 'R'=>false}
   end
 
   def new
