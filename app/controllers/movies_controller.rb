@@ -14,9 +14,9 @@ class MoviesController < ApplicationController
     end
 
     @movies = Movie.where :rating => @search_criteria
+    session[:ratings_selection] = @search_criteria
 #    @movies = Movie.all
 # temp to show checkbox
-#@all_ratings = {'G'=>false, 'PG'=>false, 'PG-13'=>false, 'R'=>false}
   end
 
   def new
@@ -48,15 +48,18 @@ class MoviesController < ApplicationController
   end
 
   def sort
-    if params[:sort_item] == "title" 
-       @movies = Movie.all(:order => "title")
-       @highlight = "title"
-    else
-       @movies = Movie.all(:order => "release_date")
-       @highlight = "release_date"
-    end
-#temperoary measure so sort won't crash
     @all_ratings = {'G'=>false, 'PG'=>false, 'PG-13'=>false, 'R'=>false}
+    if  session.has_key?(:ratings_selection)
+        @search_criteria = session[:ratings_selection]
+        @choices = {:rating=>@search_criteria}
+        @search_criteria.each { | value | @all_ratings[value] = true }
+    else
+        @choices = :all
+    end
+
+    @movies = Movie.where(@choices).order(params[:sort_item])
+    @highlight = params[:sort_item]
+
     render :action => "index"
   end
 end
